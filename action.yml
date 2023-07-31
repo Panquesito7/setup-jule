@@ -1,0 +1,62 @@
+name: "Setup Jule"
+description: "Setup a JuleC development environment in your project."
+author: "Panquesito7"
+inputs:
+  version:
+    description: "The version of JuleC that will be downloaded. Use \"latest\" for the latest Git version."
+    required: true
+    default: "latest"
+  directory:
+    description: "Directory where Jule will be downloaded."
+    required: true
+    default: "."
+  architecture:
+    description: "The architecture that's going to be used. Valid options are \"arm64\" and \"amd64\"."
+    required: true
+    default: "amd64"
+  extra-command:
+    description: "Extra command that will be executed after JuleC is installed."
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget tar
+      shell: bash
+    - name: Adjust directory
+      run: |
+        directory="${{ inputs.directory }}"
+        if [[ ${{ inputs.directory }} == */ ]]; then
+          directory="${directory%?}"
+          ${{ inputs.directory }}=directory
+        fi
+      shell: bash
+    - name: Clone JuleC
+      run: |
+        if [[ ${{ inputs.version }} == "latest" ]] || [[ ${{ inputs.version }} == "current" ]]; then
+          git clone https://github.com/julelang/jule.git ${{ inputs.directory }}/julec-${{ inputs.version }}
+        else
+          wget https://github.com/julelang/jule/archive/refs/tags/jule-${{ inputs.version }}.tar.gz -O julec.tar.gz
+          tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-${{ inputs.version }}
+        fi
+      shell: bash
+    - name: Get JuleC IR
+      run: |
+        cd ${{ inputs.directory }}/julec-${{ inputs.version }}
+        wget https://raw.githubusercontent.com/julelang/julec-ir/main/src/linux-${{ inputs.architecture }}.cpp -O ir.cpp
+      shell: bash
+    - name: Compile JuleC
+      run: |
+        cd ${{ inputs.directory }}/julec-${{ inputs.version }}
+        mkdir bin
+        clang++ -O0 --std=c++17 -Wno-everything -o bin/julec ir.cpp
+      shell: bash
+    - name: Run extra commands
+      run: |
+        if [[ -n "${{ inputs.extra-command }}" ]]; then
+          ${{ inputs.directory }}/julec-${{ inputs.version }}/bin/julec ${{ inputs.extra-command }}
+        fi
+      shell: bash
