@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: Panquesito7/setup-jule@v1.0.0
+      - uses: Panquesito7/setup-jule@v1.1.0
         with:
           version: latest         # https://github.com/julelang/jule/releases for all JuleC versions.
           directory: .            # The directory where JuleC will be installed.
@@ -52,7 +52,7 @@ You can see the full list of commands in the [official manual](https://manual.ju
 
 ```yml
 - uses: actions/checkout@v3
-- uses: Panquesito7/setup-jule@v1.0.0
+- uses: Panquesito7/setup-jule@v1.1.0
   with:
     version: beta-0.0.2
     directory: ./libs
