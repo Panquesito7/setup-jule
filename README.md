@@ -37,18 +37,18 @@ Release syntax is taken from the official [JuleC releases](https://github.com/ju
 
 ### Architecture
 
-The given architecture that will be used to install JuleC.\
+The architecture that will be used to install JuleC.\
 `arm64` and `amd64` can be used. `amd64` is the recommended architecture.
 
 ### Extra command
 
-Extra command that will be run after compiling and installing JuleC.\
-Here's a list of all available commands, as of `beta-0.0.2`:
+An extra command will be run after compiling and installing JuleC.\
+You can see the full list of commands in the [official manual](https://manual.jule.dev/compiler/basic-commands.html).
 
-- `version`: Prints the current version of JuleC. E.g.: `beta-0.0.2`.
-- `help`: Prints all the available commands.
-- `tools`: Extra tools that can be used with JuleC. Currently, seems undocumented.
-- `julenv`: Shows information about the current JuleC environment.
+> **Note**
+>
+> The manual is updated and based on the latest Jule commits.\
+> However, the IR file might not be up-to-date, meaning that new commands won't work.
 
 ```yml
 - uses: actions/checkout@v3
