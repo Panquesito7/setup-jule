@@ -17,6 +17,10 @@ inputs:
     description: "The architecture that's going to be used. Valid options are \"arm64\" and \"amd64\"."
     required: false
     default: "amd64"
+  add-to-path:
+    description: "Whether to add JuleC to the PATH or not."
+    required: false
+    default: "false"
   extra-command:
     description: "Extra command that will be executed after JuleC is installed."
     required: false
@@ -25,19 +29,20 @@ runs:
   using: "composite"
   steps:
     - name: Install dependencies
+      shell: bash
       run: |
         sudo apt-get update
         sudo apt-get install -y wget tar
-      shell: bash
     - name: Adjust directory
+      shell: bash
       run: |
         directory="${{ inputs.directory }}"
         if [[ ${{ inputs.directory }} == */ ]]; then
           directory="${directory%?}"
           ${{ inputs.directory }}=directory
         fi
-      shell: bash
     - name: Clone JuleC
+      shell: bash
       run: |
         if [[ ${{ inputs.version }} == "latest" ]] || [[ ${{ inputs.version }} == "current" ]]; then
           git clone https://github.com/julelang/jule.git ${{ inputs.directory }}/julec-${{ inputs.version }}
@@ -45,21 +50,30 @@ runs:
           wget https://github.com/julelang/jule/archive/refs/tags/jule-${{ inputs.version }}.tar.gz -O julec.tar.gz
           tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-${{ inputs.version }}
         fi
-      shell: bash
     - name: Get JuleC IR
+      shell: bash
       run: |
         cd ${{ inputs.directory }}/julec-${{ inputs.version }}
         wget https://raw.githubusercontent.com/julelang/julec-ir/main/src/linux-${{ inputs.architecture }}.cpp -O ir.cpp
-      shell: bash
     - name: Compile JuleC
+      shell: bash
       run: |
         cd ${{ inputs.directory }}/julec-${{ inputs.version }}
         mkdir bin
         clang++ -O0 --std=c++17 -Wno-everything -o bin/julec ir.cpp
+    - name: Add JuleC to the PATH
       shell: bash
+      run: |
+        if [[ ${{ inputs.add-to-path }} == true ]]; then
+          echo "export PATH=\$PATH:${{ inputs.directory }}/julec-${{ inputs.version }}/bin/" >> $GITHUB_PATH
+        fi
     - name: Run extra commands
+      shell: bash
       run: |
         if [[ -n "${{ inputs.extra-command }}" ]]; then
-          ${{ inputs.directory }}/julec-${{ inputs.version }}/bin/julec ${{ inputs.extra-command }}
+          if [[ ${{ inputs.add-to-path }} == true ]]; then
+            julec ${{ inputs.extra-command }}
+          else
+            ${{ inputs.directory }}/julec-${{ inputs.version }}/bin/julec ${{ inputs.extra-command }}
+          fi
         fi
-      shell: bash

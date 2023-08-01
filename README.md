@@ -22,8 +22,9 @@ jobs:
         with:
           version: latest         # https://github.com/julelang/jule/releases for all JuleC versions.
           directory: .            # The directory where JuleC will be installed.
-          architecture: amd64     # Architecture that will be used. Valid options are `amd64` and `arm64`.
-          extra-command: version  # Extra command that will be run after compiling JuleC (see below for more information).
+          architecture: amd64     # Architecture that will be used. Valid options are `amd64` and `arm64` (optional).
+          add-to-path: false      # Whether to add JuleC to the PATH or not (optional).
+          extra-command: version  # Extra command that will be run after compiling JuleC (optional; see below for more information).
 ```
 
 ### Version syntax
@@ -55,8 +56,16 @@ Here's a list of all available commands, as of `beta-0.0.2`:
     version: beta-0.0.2
     directory: ./libs
     architecture: amd64
+    add-to-path: true
     extra-command: julenv
 ```
+
+## Supported operating systems
+
+Currently, macOS and Linux are supported, just like JuleC itself.\
+Windows support will be added once JuleC supports Windows.
+
+For more information: <https://github.com/julelang/jule/issues/34>
 
 ## License
 
