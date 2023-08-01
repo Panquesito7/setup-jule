@@ -1,6 +1,9 @@
-name: "Setup Jule"
+name: "Setup JuleC environment"
 description: "Setup a JuleC development environment in your project."
 author: "Panquesito7"
+branding:
+  icon: code
+  color: gray-dark
 inputs:
   version:
     description: "The version of JuleC that will be downloaded. Use \"latest\" for the latest Git version."
