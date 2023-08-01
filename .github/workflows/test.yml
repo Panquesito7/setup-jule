@@ -2,7 +2,10 @@ name: Action validation
 on: workflow_dispatch
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
     steps:
       - uses: actions/checkout@v3
       - name: Setup Jule
