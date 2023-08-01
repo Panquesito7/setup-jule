@@ -15,7 +15,7 @@ inputs:
     default: "."
   architecture:
     description: "The architecture that's going to be used. Valid options are \"arm64\" and \"amd64\"."
-    required: true
+    required: false
     default: "amd64"
   extra-command:
     description: "Extra command that will be executed after JuleC is installed."
