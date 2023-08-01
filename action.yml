@@ -28,11 +28,20 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Install Homebrew
+      shell: bash
+      run: |
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+          echo 'export PATH="/usr/local/bin:$PATH"' >> $GITHUB_PATH
+        elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+          echo "export PATH=\$PATH:/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
+        fi
     - name: Install dependencies
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get install -y wget tar
+        brew update
+        brew install wget jq
     - name: Adjust directory
       shell: bash
       run: |
@@ -62,7 +71,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.directory }}/julec-${{ inputs.version }}
-        wget https://raw.githubusercontent.com/julelang/julec-ir/main/src/linux-${{ inputs.architecture }}.cpp -O ir.cpp
+        wget https://raw.githubusercontent.com/julelang/julec-ir/main/src/$( [[ "$OSTYPE" == "darwin"* ]] && echo darwin || echo linux)-${{ inputs.architecture }}.cpp -O ir.cpp
     - name: Compile JuleC
       shell: bash
       run: |
