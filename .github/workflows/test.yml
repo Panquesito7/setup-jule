@@ -8,7 +8,7 @@ jobs:
       - name: Setup Jule
         uses: Panquesito7/setup-jule@main
         with:
-          version: latest
+          version: dev
           directory: .
           add-to-path: true
           architecture: amd64
