@@ -31,7 +31,8 @@ jobs:
 
 Release syntax is taken from the official [JuleC releases](https://github.com/julelang/jule/releases).
 
-- `latest` and `current` for the latest commit.
+- `latest` and `current` for the latest release.
+- `dev` for the latest commit.
 - `beta-0.x.x` (there are no stable releases for now).
 
 ### Architecture

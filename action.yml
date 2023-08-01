@@ -6,7 +6,7 @@ branding:
   color: gray-dark
 inputs:
   version:
-    description: "The version of JuleC that will be downloaded. Use \"latest\" for the latest Git version."
+    description: "The version of JuleC that will be downloaded. Use \"latest\" for the latest stable release."
     required: true
     default: "latest"
   directory:
@@ -45,9 +45,17 @@ runs:
       shell: bash
       run: |
         if [[ ${{ inputs.version }} == "latest" ]] || [[ ${{ inputs.version }} == "current" ]]; then
+          RELEASES=$(curl -s https://api.github.com/repos/julelang/jule/releases)
+          LATEST_RELEASE=$(echo "$RELEASES" | jq -r '.[] | select(.draft == false) | .tarball_url' | head -n 1)
+
+          wget $LATEST_RELEASE -O julec.tar.gz
+          mkdir -p ${{ inputs.directory }}/julec-latest
+          tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-latest
+        elif [[ ${{ inputs.version }} == "dev" ]]; then
           git clone https://github.com/julelang/jule.git ${{ inputs.directory }}/julec-${{ inputs.version }}
         else
           wget https://github.com/julelang/jule/archive/refs/tags/jule-${{ inputs.version }}.tar.gz -O julec.tar.gz
+          mkdir -p ${{ inputs.directory }}/julec-${{ inputs.version }}
           tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-${{ inputs.version }}
         fi
     - name: Get JuleC IR
