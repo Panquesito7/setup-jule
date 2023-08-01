@@ -10,4 +10,6 @@ jobs:
         with:
           version: latest
           directory: .
+          add-to-path: true
           architecture: amd64
+          extra-command: version
