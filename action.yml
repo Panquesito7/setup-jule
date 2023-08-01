@@ -28,6 +28,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check operating system
+      shell: bash
+      run: |
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          echo "The action doesn't support building on Windows. Exiting script."
+          exit 1
+        fi
     - name: Install Homebrew
       shell: bash
       run: |
