@@ -35,20 +35,6 @@ runs:
           echo "The action doesn't support building on Windows. Exiting script."
           exit 1
         fi
-    - name: Install Homebrew
-      shell: bash
-      run: |
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-          echo 'export PATH="/usr/local/bin:$PATH"' >> $GITHUB_PATH
-        elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-          echo "export PATH=\$PATH:/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
-        fi
-    - name: Install dependencies
-      shell: bash
-      run: |
-        brew update
-        brew install wget jq
     - name: Adjust directory
       shell: bash
       run: |
@@ -64,13 +50,13 @@ runs:
           RELEASES=$(curl -s https://api.github.com/repos/julelang/jule/releases)
           LATEST_RELEASE=$(echo "$RELEASES" | jq -r '.[] | select(.draft == false) | .tarball_url' | head -n 1)
 
-          wget $LATEST_RELEASE -O julec.tar.gz
+          curl -o ./julec.tar.gz $LATEST_RELEASE
           mkdir -p ${{ inputs.directory }}/julec-latest
           tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-latest
         elif [[ ${{ inputs.version }} == "dev" ]]; then
           git clone https://github.com/julelang/jule.git ${{ inputs.directory }}/julec-${{ inputs.version }}
         else
-          wget https://github.com/julelang/jule/archive/refs/tags/jule-${{ inputs.version }}.tar.gz -O julec.tar.gz
+          curl -o ./julec.tar.gz https://github.com/julelang/jule/archive/refs/tags/jule-${{ inputs.version }}.tar.gz -O julec.tar.gz
           mkdir -p ${{ inputs.directory }}/julec-${{ inputs.version }}
           tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-${{ inputs.version }}
         fi
@@ -78,7 +64,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.directory }}/julec-${{ inputs.version }}
-        wget https://raw.githubusercontent.com/julelang/julec-ir/main/src/$( [[ "$OSTYPE" == "darwin"* ]] && echo darwin || echo linux)-${{ inputs.architecture }}.cpp -O ir.cpp
+        curl -o ./ir.cpp https://raw.githubusercontent.com/julelang/julec-ir/main/src/$( [[ "$OSTYPE" == "darwin"* ]] && echo darwin || echo linux)-${{ inputs.architecture }}.cpp
     - name: Compile JuleC
       shell: bash
       run: |
