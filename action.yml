@@ -50,7 +50,7 @@ runs:
           RELEASES=$(curl -s https://api.github.com/repos/julelang/jule/releases)
           LATEST_RELEASE=$(echo "$RELEASES" | jq -r '.[] | select(.draft == false) | .tarball_url' | head -n 1)
 
-          curl -o ./julec.tar.gz $LATEST_RELEASE
+          curl -o julec.tar.gz $LATEST_RELEASE
           mkdir -p ${{ inputs.directory }}/julec-latest
           tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-latest
         elif [[ ${{ inputs.version }} == "dev" ]]; then
