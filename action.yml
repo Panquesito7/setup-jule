@@ -56,7 +56,7 @@ runs:
         elif [[ ${{ inputs.version }} == "dev" ]]; then
           git clone https://github.com/julelang/jule.git ${{ inputs.directory }}/julec-${{ inputs.version }}
         else
-          curl -o ./julec.tar.gz https://github.com/julelang/jule/archive/refs/tags/jule-${{ inputs.version }}.tar.gz -O julec.tar.gz
+          curl -o julec.tar.gz https://github.com/julelang/jule/archive/refs/tags/jule-${{ inputs.version }}.tar.gz -O julec.tar.gz
           mkdir -p ${{ inputs.directory }}/julec-${{ inputs.version }}
           tar -xzf julec.tar.gz -C ${{ inputs.directory }}/julec-${{ inputs.version }}
         fi
@@ -64,7 +64,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.directory }}/julec-${{ inputs.version }}
-        curl -o ./ir.cpp https://raw.githubusercontent.com/julelang/julec-ir/main/src/$( [[ "$OSTYPE" == "darwin"* ]] && echo darwin || echo linux)-${{ inputs.architecture }}.cpp
+        curl -o ir.cpp https://raw.githubusercontent.com/julelang/julec-ir/main/src/$( [[ "$OSTYPE" == "darwin"* ]] && echo darwin || echo linux)-${{ inputs.architecture }}.cpp
     - name: Compile JuleC
       shell: bash
       run: |
