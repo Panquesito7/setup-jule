@@ -35,6 +35,24 @@ runs:
           echo "The action doesn't support building on Windows. Exiting script."
           exit 1
         fi
+    - name: Install Homebrew if Needed
+      shell: bash
+      run: |
+        if [[ ${{ inputs.version }} == "latest" ]] || [[ ${{ inputs.version }} == "current" ]]; then
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          if [[ "$OSTYPE" == "darwin"* ]]; then
+            echo 'export PATH="/usr/local/bin:$PATH"' >> $GITHUB_PATH
+          elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            echo "export PATH=\$PATH:/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
+          fi
+        fi
+    - name: Install dependencies
+      shell: bash
+      run: |
+        if [[ ${{ inputs.version }} == "latest" ]] || [[ ${{ inputs.version }} == "current" ]]; then
+          brew update
+          brew install jq
+        fi
     - name: Adjust directory
       shell: bash
       run: |
