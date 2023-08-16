@@ -58,7 +58,7 @@ You can see the full list of commands in the [official manual](https://manual.ju
     directory: ./libs
     architecture: amd64
     add-to-path: true
-    extra-command: julenv
+    extra-command: version
 ```
 
 ## Supported operating systems
