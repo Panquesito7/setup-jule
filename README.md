@@ -18,11 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: Panquesito7/setup-jule@v1.1.2
+      - uses: Panquesito7/setup-jule@v1.1.3
         with:
           version: latest         # https://github.com/julelang/jule/releases for all JuleC versions.
           directory: .            # The directory where JuleC will be installed.
-          architecture: amd64     # Architecture that will be used. Valid options are `amd64` and `arm64` (optional).
+          architecture: amd64     # Architecture that will be used. Valid options are `amd64`, `arm64`, and `i386` (optional).
           add-to-path: false      # Whether to add JuleC to the PATH or not (optional).
           extra-command: version  # Extra command that will be run after compiling JuleC (optional; see below for more information).
 ```
@@ -38,7 +38,7 @@ Release syntax is taken from the official [JuleC releases](https://github.com/ju
 ### Architecture
 
 The architecture that will be used to install JuleC.\
-`arm64` and `amd64` can be used. `amd64` is the recommended architecture.
+`arm64`, `amd64`, and `i386` (Linux only) can be used. `amd64` is the recommended architecture.
 
 ### Extra command
 
@@ -52,7 +52,7 @@ You can see the full list of commands in the [official manual](https://manual.ju
 
 ```yml
 - uses: actions/checkout@v3
-- uses: Panquesito7/setup-jule@v1.1.2
+- uses: Panquesito7/setup-jule@v1.1.3
   with:
     version: beta-0.0.2
     directory: ./libs
