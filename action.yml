@@ -14,7 +14,7 @@ inputs:
     required: true
     default: "."
   architecture:
-    description: "The architecture that's going to be used. Valid options are \"arm64\" and \"amd64\"."
+    description: "The architecture that's going to be used. Valid options are \"arm64\", \"amd64\", and \"i386\"."
     required: false
     default: "amd64"
   add-to-path:
@@ -82,7 +82,13 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.directory }}/julec-${{ inputs.version }}
-        curl -o ir.cpp https://raw.githubusercontent.com/julelang/julec-ir/main/src/$( [[ "$OSTYPE" == "darwin"* ]] && echo darwin || echo linux)-${{ inputs.architecture }}.cpp
+
+        architecture=${{ inputs.architecture }}
+        if [[ "$OSTYPE" == "darwin"* ]] && [[ "$architecture" == "i386" ]]; then
+          architecture="amd64"
+        fi
+
+        curl -o ir.cpp https://raw.githubusercontent.com/julelang/julec-ir/main/src/$( [[ "$OSTYPE" == "darwin"* ]] && echo darwin || echo linux)-${architecture}.cpp
     - name: Compile JuleC
       shell: bash
       run: |
