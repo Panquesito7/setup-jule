@@ -17,7 +17,7 @@ jobs:
   jule:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: Panquesito7/setup-jule@v1.1.3
         with:
           version: latest         # https://github.com/julelang/jule/releases for all JuleC versions.
@@ -51,7 +51,7 @@ You can see the full list of commands in the [official manual](https://manual.ju
 > However, the IR file might not be up-to-date, meaning that new commands won't work.
 
 ```yml
-- uses: actions/checkout@v3
+- uses: actions/checkout@v4
 - uses: Panquesito7/setup-jule@v1.1.3
   with:
     version: beta-0.0.2
